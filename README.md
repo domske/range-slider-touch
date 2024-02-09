@@ -6,7 +6,7 @@ Range slider web component optimized for touch.
 
 ![](docs/demo.gif)
 
-[Demo](domske.github.io/range-slider-touch/)
+[Demo](https://domske.github.io/range-slider-touch/)
 
 ## Features
 
