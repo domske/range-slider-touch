@@ -1,6 +1,6 @@
 {
   "name": "range-slider-touch",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Range slider web component optimized for touch.",
   "keywords": [
     "input",
@@ -20,6 +20,7 @@
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
   "unpkg": "dist/range-slider-touch/range-slider-touch.esm.js",
+  "homepage": "https://domske.github.io/range-slider-touch/",
   "repository": {
     "type": "git",
     "url": "https://github.com/domske/range-slider-touch.git"
@@ -28,6 +29,10 @@
     "dist/",
     "loader/"
   ],
+  "author": {
+    "name": "Dominik Geng",
+    "url": "https://github.com/domske"
+  },
   "scripts": {
     "stencil": "stencil",
     "build": "stencil build --docs",
