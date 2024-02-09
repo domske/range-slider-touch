@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <title>Range Slider Touch</title>
+
+    <script type="module" src="/build/range-slider-touch.esm.js"></script>
+    <script nomodule src="/build/range-slider-touch.js"></script>
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .app {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
+        background-color: #222;
+        color: #ccc;
+      }
+
+      .app.light {
+        background-color: #ddd;
+        color: #444;
+      }
+
+      .app.light .slider {
+        background-color: #fff;
+      }
+
+      .slider {
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #333;
+      }
+
+      .slider .label {
+        margin: 0 0 10px 10px;
+        user-select: none;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .slider .label .value {
+        opacity: 0.5;
+      }
+
+      range-slider-touch {
+        color: #1f80ff;
+      }
+
+      range-slider-touch.custom {
+        --border-radius: 3px;
+        --background-opacity: 0.1;
+        color: #ffdd22;
+      }
+
+      range-slider-touch.custom::part(thumb) {
+        display: none;
+      }
+
+      button {
+        background-color: #333;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        border-radius: 5px;
+        user-select: none;
+        cursor: pointer;
+      }
+
+      .app.light button {
+        background-color: #fff;
+        color: #444;
+      }
+
+      .header {
+        text-align: center;
+        padding: 0 10px;
+      }
+
+      .header p {
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="header">
+        <h2>Range Slider Touch</h2>
+        <p>
+          View this on mobile. Chrome DevTools mobile view touch may also work. But the Firefox touch simulation is
+          currently not working. Safari iOS was only tested secondary. This component was created mainly to replace the
+          terrible input range on Android WebView.
+        </p>
+      </div>
+
+      <button id="toggle-theme">Toggle Theme</button>
+
+      <div class="slider">
+        <div class="label">Basic</div>
+        <range-slider-touch></range-slider-touch>
+      </div>
+      <div class="slider">
+        <div class="label">Values</div>
+        <range-slider-touch min="25" max="555" value="444" step="50"></range-slider-touch>
+      </div>
+      <div class="slider">
+        <div class="label">Disabled</div>
+        <range-slider-touch disabled></range-slider-touch>
+      </div>
+      <div class="slider">
+        <div class="label">Custom Style</div>
+        <range-slider-touch class="custom"></range-slider-touch>
+      </div>
+      <div class="slider">
+        <div class="label">Native HTML Input Range</div>
+        <input type="range" style="width: 100%" />
+      </div>
+    </div>
+
+    <script>
+      const app = document.querySelector('.app');
+
+      createRange('Step 10', { step: 10 });
+      createRange('Step 0.1', { step: 0.1 });
+      createRange('Long press shorter', { time: 150 });
+      createRange('Long press longer', { time: 600 });
+
+      for (let i = 0; i < 100; i++) {
+        createRange();
+      }
+
+      function createRange(text = 'Range Slider', attr = {}) {
+        const sliderEl = createElement({ tag: 'div', className: 'slider', parent: app });
+        const labelEl = createElement({ tag: 'div', className: 'label', parent: sliderEl });
+        createElement({ tag: 'div', className: 'text', text, parent: labelEl });
+        const valueEl = createElement({ tag: 'div', className: 'value', parent: labelEl });
+        const rangeEl = createElement({ tag: 'range-slider-touch', parent: sliderEl, attr });
+        rangeEl.addEventListener('input', (event) => (valueEl.textContent = `${round(event?.detail?.value, 2)}`));
+      }
+
+      function createElement({ tag, className, parent, attr, text }) {
+        const element = document.createElement(tag);
+        if (className) {
+          element.className = className;
+        }
+        if (attr) {
+          for (const key in attr) {
+            element.setAttribute(key, attr[key]);
+          }
+        }
+        if (text) {
+          element.textContent = text;
+        }
+        if (parent) {
+          parent.appendChild(element);
+        }
+        return element;
+      }
+
+      function round(number, decimalPlace) {
+        if (decimalPlace) {
+          const factor = Math.pow(10, decimalPlace);
+          return Math.round(number * factor) / factor;
+        } else {
+          return Math.round(number);
+        }
+      }
+
+      const themeRange = document.querySelector('#toggle-theme');
+      themeRange.addEventListener('click', () => {
+        app.classList.toggle('light');
+      });
+
+      // Disabled context menu on touch long press.
+      window.addEventListener('contextmenu', (e) => e.preventDefault());
+    </script>
+  </body>
+</html>
